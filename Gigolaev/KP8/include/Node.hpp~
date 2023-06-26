@@ -1,0 +1,9 @@
+#pragma once
+class Node
+{
+public:
+	Node(char v);
+	char value;
+	Node* next;
+};
+#incldue "../src/Node.cpp"
