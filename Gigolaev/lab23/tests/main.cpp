@@ -6,6 +6,7 @@
 int main() {
     TreeNode<int>* root = new TreeNode<int>(1);
     root->children.push_back(new TreeNode<int>(2));
+    std::cout << find_node(root, 2) << std::endl;
     TreeNode<int>* node = new TreeNode<int>(3);
     add_child(root->children[0], node);
     add_child(node, new TreeNode<int>(8));
