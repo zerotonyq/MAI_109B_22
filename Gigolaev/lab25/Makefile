@@ -1,16 +1,38 @@
-CC = g++
-CFLAGS = -std=c++11 -Wall -Wextra -Wpedantic
+CXX       := g++
+CXX_FLAGS := -std=c++17 -Wall -fsanitize=address
 
-all: program
+BIN     := bin
+SRC     := src
+INCLUDE := include
+LIB     := lib
+TESTS   := tests
+LIBRARIES   := -lstdc++ -lm
+EXECUTABLE  := main
+RUN_TEST    := test
 
-program: program.o
-	$(CC) $(CFLAGS) MyDeque.hpp MyDeque.o program.o -o program
+build: $(BIN)/$(EXECUTABLE)
 
-program.o: program.cpp
-	$(CC) $(CFLAGS) -c program.cpp -o program.o
+run: clean build
+	@echo "Executing..."
+	$(BIN)/$(EXECUTABLE)
 
-MyDeque.o: MyDeque.cpp MyDeque.hpp
-	$(CC) $(CFLAGS) -c MyDeque.cpp -o MyDeque.o
+$(BIN)/$(EXECUTABLE): $(TESTS)/main.cpp | $(BIN)
+	@echo "Building..."
+	$(CXX) $(CXX_FLAGS) -I $(INCLUDE) -L $(LIB) $^ -o $@ $(LIBRARIES)
+
+$(BIN)/$(RUN_TEST): $(wildcard $(TESTS)/*.cpp) $(wildcard $(TESTS)/*.hpp) |$(BIN)
+	@echo "Building tests..."
+	$(CXX) $(CXX_FLAGS) -I $(INCLUDE) -L $(LIB) $^ -o $@ $(LIBRARIES)
+
+$(BIN):
+	mkdir $@
 
 clean:
-	rm -f *.o program
+	@echo "Clearing..."
+	-rm -r $(BIN)
+
+_test: $(BIN)/$(RUN_TEST)
+
+test: clean _test
+	@echo "Run tests..."
+	$(BIN)/$(RUN_TEST)
