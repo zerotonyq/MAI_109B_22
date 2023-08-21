@@ -1,12 +1,18 @@
-﻿#include <iostream>
+#include "../include/Tree.hpp"
+#include "../include/Node.hpp"
 #include <stack>
 #include <cstring>
-#include <string>
-#include <locale.h>
-#include "../include/Vector.hpp"
-#include "../include/Node.hpp"
 
-int getOperatorWeight(char op) {
+void Tree::prefixTraversalPrint(Node* root) {
+    if (root == NULL) {
+        return;
+    }
+    std::cout << root->data << " ";
+    prefixTraversalPrint(root->left);
+    prefixTraversalPrint(root->right);
+}
+
+int Tree::getOperatorWeight(char op) {
     int weight = -1;
 
     switch (op) {
@@ -25,8 +31,7 @@ int getOperatorWeight(char op) {
 
     return weight;
 }
-
-int hasHigherPrecedence(char op1, char op2) {
+int Tree::hasHigherPrecedence(char op1, char op2) {
     int op1Weight = getOperatorWeight(op1);
     int op2Weight = getOperatorWeight(op2);
 
@@ -36,16 +41,14 @@ int hasHigherPrecedence(char op1, char op2) {
 
     return op1Weight > op2Weight;
 }
-
-bool isOperator(char c) {
+bool Tree::isOperator(char c) {
     return (c == '+' || c == '-' || c == '*' || c == '/' || c == '^');
 }
 
-bool isOperand(char c) {
+bool Tree::isOperand(char c) {
     return (c >= '0' && c <= '9');
 }
-
-string infixToPostfix(std::string infix) {
+std::string Tree::infixToPostfix(std::string infix) {
   std::stack<char> opStack;
   std::string postfix;
 
@@ -85,8 +88,7 @@ string infixToPostfix(std::string infix) {
 
     return postfix;
 }
-
-Node* createNode(char c) {
+Node* Tree::createNode(char c) {
   Node* node = new Node();
   node->data = c;
   node->left = NULL;
@@ -94,7 +96,8 @@ Node* createNode(char c) {
   return node;
 }
 
-Node* constructTree(std::string postfix) {
+Node* Tree::constructTree(std::string infix) {
+    std::string postfix = infixToPostfix(infix);
   std::stack<Node*> stk;
   Node* waiting = nullptr;
   for (size_t i = 0; i < postfix.length(); ++i) {
@@ -128,34 +131,5 @@ Node* constructTree(std::string postfix) {
 	}
     }
   }
-    //std::std::cout << stk.size() << " " << stk.top()->data;
     return stk.top();
-}
-
-void prefixTraversalPrint(Node* root) {
-    if (root == NULL) {
-        return;
-    }
-
-    std::cout << root->data << " ";
-    prefixTraversalPrint(root->left);
-    prefixTraversalPrint(root->right);
-}
-
-int main() {
-    setlocale(LC_ALL, "Russian_Russia.1251");
-    std::string infix;
-    std::cout << "type infix: ";
-    getline(cin, infix);
-
-    std::string postfix = infixToPostfix(infix);
-    //std::cout << postfix << std::endl;
-    Node* root = constructTree(postfix);
-
-    std::cout << "here if postfix tree: ";
-    prefixTraversalPrint(root);
-
-    std::cout << std::endl;
-    delete root;
-    return 0;
 }

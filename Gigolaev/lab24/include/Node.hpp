@@ -6,10 +6,7 @@ struct Node {
     Node* right = nullptr;
   ~Node()
   {
-    if(left)
-      delete left;
-    if(right)
-      delete right;
-    data.clear();
+    delete left;
+    delete right;
   }
 };
