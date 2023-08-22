@@ -1,4 +1,4 @@
-﻿
+﻿#include "../../lab23/include/Vector.hpp"
 #include <locale.h>
 #include "../include/Tree.hpp"
 #include "../include/Node.hpp"
